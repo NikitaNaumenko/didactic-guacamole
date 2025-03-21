@@ -5,7 +5,6 @@ defmodule SentinelWeb.UserAuth do
   import Phoenix.Controller
   import Inertia.Controller
 
-
   alias Sentinel.Accounts
 
   # Make the remember me cookie valid for 60 days.
@@ -95,6 +94,7 @@ defmodule SentinelWeb.UserAuth do
   def fetch_current_user(conn, _opts) do
     {user_token, conn} = ensure_user_token(conn)
     user = user_token && Accounts.get_user_by_session_token(user_token)
+    dbg(user)
     assign(conn, :current_user, user)
   end
 
