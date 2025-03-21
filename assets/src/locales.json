@@ -1,0 +1,51 @@
+{
+  "en": {
+    "translation": {
+      "auth": {
+        "registration": {
+          "accountName": "Account Name",
+          "email": "Email",
+          "password": "Password",
+          "confirmPassword": "Confirm Password",
+          "submit": "Register",
+          "sign_in": "Sign In",
+          "have_account": "Already have an account?"
+        }
+      },
+      "monitors": {
+        "title": "Monitors",
+        "list": "Monitors List",
+        "create": "Create Monitor",
+        "edit": "Edit Monitor",
+        "show": "View Monitor",
+        "name": "Name",
+        "description": "Description",
+        "url": "URL",
+        "method": "Method",
+        "status": "Status",
+        "active": "Active",
+        "inactive": "Inactive",
+        "interval": "Interval",
+        "timeout": "Timeout",
+        "expected_status": "Expected Status",
+        "retry_count": "Retry Count",
+        "retry_interval": "Retry Interval",
+        "body": "Request Body",
+        "headers": "Headers",
+        "no_description": "No description",
+        "save": "Save",
+        "back": "Back",
+        "seconds": "seconds",
+        "last_check": "Last Check",
+        "last_status": "Last Status",
+        "response_time": "Response Time",
+        "success_count": "Success Count",
+        "failure_count": "Failure Count",
+        "never": "Never",
+        "actions": "Actions",
+        "view": "View"
+      } 
+    }
+  },
+  "ru": {}
+}

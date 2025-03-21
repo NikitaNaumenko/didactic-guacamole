@@ -49,14 +49,20 @@ defmodule SentinelWeb.Router do
   scope "/", SentinelWeb.Web do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
-    get "/users/register", RegistrationController, :new
-    post "/users/register", RegistrationController, :create
-    # get "/users/log_in", UserSessionController, :new
-    # post "/users/log_in", UserSessionController, :create
+    get "/registration", RegistrationController, :new
+    post "/register", RegistrationController, :create
+    get "/sign_in", SignInController, :new
+    post "/sign_in", SignInController, :create
     # get "/users/reset_password", UserResetPasswordController, :new
     # post "/users/reset_password", UserResetPasswordController, :create
     # get "/users/reset_password/:token", UserResetPasswordController, :edit
     # put "/users/reset_password/:token", UserResetPasswordController, :update
+  end
+
+  scope "/", SentinelWeb.Web do
+    pipe_through [:browser, :require_authenticated_user]
+    get "/", HomeController, :home
+    resources "/monitors", MonitorController
   end
 
   # scope "/", SentinelWeb do

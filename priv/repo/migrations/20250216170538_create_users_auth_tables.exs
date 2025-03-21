@@ -5,7 +5,12 @@ defmodule Sentinel.Repo.Migrations.CreateUsersAuthTables do
     execute "CREATE EXTENSION IF NOT EXISTS citext", ""
 
     create table(:users) do
+      add :account_id, references(:accounts, on_delete: :delete_all), null: false
       add :email, :citext, null: false
+      add :role, :string, null: false
+      add :state, :string, null: false
+      add :first_name, :string
+      add :last_name, :string
       add :hashed_password, :string, null: false
       add :confirmed_at, :utc_datetime
 

@@ -7,6 +7,7 @@ defmodule Sentinel.Accounts do
   alias Sentinel.Repo
 
   alias Sentinel.Accounts.{User, UserToken, UserNotifier}
+  alias Sentinel.Accounts.Account
 
   ## Database getters
 
@@ -77,6 +78,12 @@ defmodule Sentinel.Accounts do
   def register_user(attrs) do
     %User{}
     |> User.registration_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def create_account(attrs) do
+    %Account{}
+    |> Account.changeset(attrs)
     |> Repo.insert()
   end
 

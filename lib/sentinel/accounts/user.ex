@@ -2,13 +2,24 @@ defmodule Sentinel.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Jason.Encoder, only: [:id, :email, :role, :confirmed_at, :inserted_at, :updated_at]}
+  alias Sentinel.Accounts.Account
+
   schema "users" do
     field :email, :string
+
+    field :state, Ecto.Enum,
+      values: [:created, :waiting_confirmation, :confirmed, :blocked, :deleted],
+      default: :created
+
+    field :role, Ecto.Enum, values: [:user, :admin], default: :user
+
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :current_password, :string, virtual: true, redact: true
     field :confirmed_at, :utc_datetime
 
+    belongs_to :account, Account
     timestamps(type: :utc_datetime)
   end
 
@@ -38,6 +49,16 @@ defmodule Sentinel.Accounts.User do
   def registration_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:email, :password])
+    |> cast_assoc(:account)
+    |> put_change(:role, :admin)
+    |> validate_email(opts)
+    |> validate_password(opts)
+  end
+
+  def create_changeset(user, attrs, opts \\ []) do
+    user
+    |> cast(attrs, [:email, :password])
+    |> put_change(:role, :admin)
     |> validate_email(opts)
     |> validate_password(opts)
   end

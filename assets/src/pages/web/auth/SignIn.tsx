@@ -21,43 +21,21 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const { data, setData, post, processing, errors } = useForm({
     email: "",
-    password: "",
-    users: { email: "", password: "" },
+    password: ""
   });
   const { t } = useTranslation("translation", {
-    keyPrefix: "auth.registration",
+    keyPrefix: "auth.sign_in",
   });
 
   console.log(errors);
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    post("/register");
+    post("/sign_in");
   }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Form handleSubmit={onSubmit} initialValues={data}>
         <div className={cn("flex flex-col gap-6", className)} {...props}>
-          <div className="grid gap-3">
-            <FormField name="name">
-              <FormItem>
-                <FormLabel
-                  className={errors.name && "text-red-500"}
-                  htmlFor="name"
-                >
-                  {t("accountName")}
-                </FormLabel>
-                <Input
-                  id="accountName"
-                  placeholder="Acme Inc."
-                  value={data.account.name}
-                  className={errors.name && "border-red-500"}
-                  onChange={(e) => setData({ ...data, name: e.target.value })}
-                  disabled={processing}
-                />
-                <FormMessage error={errors.name} />
-              </FormItem>
-            </FormField>
-          </div>
 
           <div className="grid gap-3">
             <FormField name="email">
@@ -110,17 +88,12 @@ export function LoginForm({
           </Button>
         </div>
       </Form>
-      <div className="text-slate-500 *:[a]:hover:text-slate-900 text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4 dark:text-slate-400 dark:*:[a]:hover:text-slate-50">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>
-        {""}
-        and <a href="#">Privacy Policy</a>.
-      </div>
     </div>
   );
 }
 export default function Registration() {
   const { t } = useTranslation("translation", {
-    keyPrefix: "auth.registration",
+    keyPrefix: "auth.sign_in",
   });
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
@@ -131,12 +104,6 @@ export default function Registration() {
           </div>
           Sentinel
         </a>
-        <div className="text-center text-sm">
-          {t("have_account")}{" "}
-          <a href="/login" className="underline underline-offset-4">
-            {t("sign_in")}
-          </a>
-        </div>
         <LoginForm />
       </div>
     </div>
