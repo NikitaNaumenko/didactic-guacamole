@@ -41,11 +41,11 @@ defmodule Sentinel.Monitors.Monitor do
     field :success_count, :integer, default: 0
     field :retry_count, :integer, default: 3
     field :retry_interval_seconds, :integer, default: 60
+    belongs_to :account, Sentinel.Accounts.Account
 
     timestamps(type: :utc_datetime)
   end
 
-  @doc false
   def changeset(monitor, attrs) do
     monitor
     |> cast(attrs, [
@@ -65,9 +65,10 @@ defmodule Sentinel.Monitors.Monitor do
       :failure_count,
       :success_count,
       :retry_count,
-      :retry_interval_seconds
+      :retry_interval_seconds,
+      :account_id
     ])
-    |> validate_required([:name, :url])
+    |> validate_required([:name, :url, :account_id])
     |> validate_number(:interval_seconds, greater_than: 0)
     |> validate_number(:timeout_seconds, greater_than: 0)
     |> validate_number(:retry_count, greater_than_or_equal_to: 0)

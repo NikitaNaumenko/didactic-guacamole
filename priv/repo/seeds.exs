@@ -13,12 +13,20 @@
 alias Sentinel.Accounts
 alias Sentinel.Monitors
 
-# Accounts.register_user(%{
-#   account: %{name: "Sentinel"},
-#   email: "full@mail.com",
-#   password: "Password12345",
-# })
+# Create the Sentinel account
+# sentinel_account = %Sentinel.Accounts.Account{
+#   name: "Sentinel",
+# }
+#
+# {:ok, sentinel_account} = Sentinel.Repo.insert(sentinel_account)
 
+Accounts.register_user(%{
+  account: %{name: "Sentinel"},
+  email: "full@mail.com",
+  password: "Password12345",
+})
+
+sentinel_account = Sentinel.Repo.get_by(Accounts.Account, name: "Sentinel")
 # # Создаем администратора
 # Accounts.create_user(%{
 #   account: %{name: "Admin Account"},
@@ -66,7 +74,8 @@ Monitors.create_monitor(%{
   headers: %{
     "User-Agent" => "Sentinel Monitor"
   },
-  is_active: true
+  is_active: true,
+  account_id: sentinel_account.id
 })
 
 # Создаем монитор для API эндпоинта
@@ -82,7 +91,8 @@ Monitors.create_monitor(%{
     "Authorization" => "Bearer test-token"
   },
   body: Jason.encode!(%{check: "health"}),
-  is_active: true
+  is_active: true,
+  account_id: sentinel_account.id
 })
 
 # Создаем монитор с расширенными настройками
@@ -98,9 +108,9 @@ Monitors.create_monitor(%{
   },
   is_active: true,
   retry_count: 5,
-  retry_interval_seconds: 30
+  retry_interval_seconds: 30,
+  account_id: sentinel_account.id
 })
-
 # Создаем неактивный монитор
 Monitors.create_monitor(%{
   name: "Inactive Monitor",
@@ -109,5 +119,6 @@ Monitors.create_monitor(%{
   method: :HEAD,
   interval_seconds: 600,
   timeout_seconds: 15,
-  is_active: false
+  is_active: false,
+  account_id: sentinel_account.id
 })

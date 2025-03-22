@@ -1,119 +1,135 @@
-import { Head } from '@inertiajs/react';
-import { Link } from '@inertiajs/react';
-import { formatDistanceToNow } from 'date-fns';
-import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Auth, Monitor } from '@/types';
-import { useCurrentUser } from '@/hooks/use-current-user';
+import { Head } from "@inertiajs/react";
+import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Monitor } from "@/types";
+import AuthLayout from "@/pages/layouts/AuthLayout";
+import { Activity, Clock, Globe, RefreshCw, Shield, Timer } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 
 interface Props {
-  auth: Auth;
   monitor: Monitor;
 }
 
-export default function Show({ auth, monitor }: Props) {
+export default function Show({ monitor }: Props) {
   const { t } = useTranslation();
-  const currentUser = useCurrentUser();
-
-  if (!currentUser) {
-    return null;
-  }
 
   return (
-    <>
-      <Head title={t('monitors.show')} />
+    <AuthLayout>
+      <Head title={t("monitors.show")} />
 
-      <div className="py-12">
-        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+      <div className="flex-1 space-y-4 p-8 pt-6">
+        <div className="flex items-center justify-between space-y-2">
+          <h2 className="text-3xl font-bold tracking-tight">{monitor.name}</h2>
+          <Badge variant={monitor.is_active ? "success" : "destructive"}>
+            {monitor.is_active ? t("monitors.active") : t("monitors.inactive")}
+          </Badge>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
-            <CardHeader>
-              <CardTitle className="flex justify-between items-center">
-                <span>{monitor.name}</span>
-                <span className={`px-2 py-1 text-xs rounded-full ${
-                  monitor.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                }`}>
-                  {monitor.is_active ? t('monitors.active') : t('monitors.inactive')}
-                </span>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                {t("monitors.interval")}
               </CardTitle>
+              <Clock className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{monitor.interval_seconds}s</div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                {t("monitors.timeout")}
+              </CardTitle>
+              <Timer className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{monitor.timeout_seconds}s</div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                {t("monitors.retry_count")}
+              </CardTitle>
+              <RefreshCw className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{monitor.retry_count}</div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                {t("monitors.expected_status")}
+              </CardTitle>
+              <Shield className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{monitor.expected_status_code}</div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+          <Card className="col-span-4">
+            <CardHeader>
+              <CardTitle>{t("monitors.details")}</CardTitle>
+              <CardDescription>{t("monitors.description")}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-sm font-medium text-gray-500">{t('monitors.description')}</h3>
-                  <p className="mt-1 text-sm text-gray-900">{monitor.description || t('monitors.no_description')}</p>
+                  <h3 className="text-sm font-medium text-muted-foreground">
+                    {t("monitors.url")}
+                  </h3>
+                  <p className="mt-1 text-sm">{monitor.url}</p>
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-medium text-gray-500">{t('monitors.url')}</h3>
-                  <p className="mt-1 text-sm text-gray-900">{monitor.url}</p>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500">{t('monitors.method')}</h3>
-                  <p className="mt-1 text-sm text-gray-900">{monitor.method}</p>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500">{t('monitors.interval')}</h3>
-                  <p className="mt-1 text-sm text-gray-900">{monitor.interval_seconds}s</p>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500">{t('monitors.timeout')}</h3>
-                  <p className="mt-1 text-sm text-gray-900">{monitor.timeout_seconds}s</p>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500">{t('monitors.expected_status')}</h3>
-                  <p className="mt-1 text-sm text-gray-900">{monitor.expected_status_code}</p>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500">{t('monitors.retry_count')}</h3>
-                  <p className="mt-1 text-sm text-gray-900">{monitor.retry_count}</p>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500">{t('monitors.retry_interval')}</h3>
-                  <p className="mt-1 text-sm text-gray-900">{monitor.retry_interval_seconds}s</p>
+                  <h3 className="text-sm font-medium text-muted-foreground">
+                    {t("monitors.method")}
+                  </h3>
+                  <p className="mt-1 text-sm">{monitor.method}</p>
                 </div>
 
                 {monitor.body && (
                   <div>
-                    <h3 className="text-sm font-medium text-gray-500">{t('monitors.body')}</h3>
-                    <pre className="mt-1 text-sm text-gray-900 bg-gray-50 p-4 rounded-md overflow-x-auto">
+                    <h3 className="text-sm font-medium text-muted-foreground">
+                      {t("monitors.body")}
+                    </h3>
+                    <pre className="mt-1 text-sm bg-muted p-4 rounded-md overflow-x-auto">
                       {monitor.body}
                     </pre>
                   </div>
                 )}
-
-                {Object.keys(monitor.headers).length > 0 && (
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500">{t('monitors.headers')}</h3>
-                    <div className="mt-1 text-sm text-gray-900 bg-gray-50 p-4 rounded-md">
-                      {Object.entries(monitor.headers).map(([key, value]) => (
-                        <div key={key} className="mb-1">
-                          <span className="font-medium">{key}:</span> {value}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
+            </CardContent>
+          </Card>
 
-              <div className="mt-6 flex justify-end space-x-2">
-                <Link href={route('monitors.edit', monitor.id)}>
-                  <Button variant="outline">{t('monitors.edit')}</Button>
-                </Link>
-                <Link href={route('monitors.index')}>
-                  <Button variant="outline">{t('monitors.back')}</Button>
-                </Link>
+          <Card className="col-span-3">
+            <CardHeader>
+              <CardTitle>{t("monitors.headers")}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {Object.entries(monitor.headers).map(([key, value]) => (
+                  <div key={key} className="flex items-center justify-between">
+                    <span className="text-sm font-medium">{key}</span>
+                    <span className="text-sm text-muted-foreground">{value as string}</span>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
         </div>
       </div>
-    </>
+    </AuthLayout>
   );
-} 
+}

@@ -76,6 +76,12 @@ config :inertia,
   # CSR).
   raise_on_ssr_failure: config_env() != :prod
 
+config :routes,
+  router: SentinelWeb.Router,
+  # Enable TypeScript output, defaults to false
+  typescript: true,
+  routes_path: "assets/src/routes"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

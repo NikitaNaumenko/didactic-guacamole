@@ -13,16 +13,36 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import { HomeIcon, SettingsIcon, LogOutIcon } from "lucide-react";
+import { HomeIcon, SettingsIcon, ActivityIcon, LogOutIcon } from "lucide-react";
 import { Link } from "@inertiajs/react";
+import { useTranslation } from "react-i18next";
+import Routes from "@/routes/routes";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
   title?: string;
 }
 
+interface MenuItem {
+  title: string;
+  href: string;
+  icon: React.ReactNode;
+  isActive: (path: string) => boolean;
+}
+
 export default function AuthLayout({ children, title }: AuthLayoutProps) {
+  const { t } = useTranslation();
   const user = useCurrentUser();
+  const currentPath = window.location.pathname;
+
+  const menuItems: MenuItem[] = [
+    {
+      title: t("sidebar.monitors"),
+      href: Routes.path("monitors.index"),
+      icon: <ActivityIcon />,
+      isActive: (path) => path.startsWith("/monitors"),
+    },
+  ];
 
   return (
     <SidebarProvider defaultOpen={true}>
@@ -37,31 +57,20 @@ export default function AuthLayout({ children, title }: AuthLayoutProps) {
 
           <SidebarContent>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  tooltip="Dashboard"
-                  isActive={window.location.pathname === "/dashboard"}
-                >
-                  <Link href="/dashboard">
-                    <HomeIcon />
-                    <span>Dashboard</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  tooltip="Settings"
-                  isActive={window.location.pathname.startsWith("/settings")}
-                >
-                  <Link href="/settings">
-                    <SettingsIcon />
-                    <span>Settings</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {menuItems.map((item, index) => (
+                <SidebarMenuItem key={index}>
+                  <SidebarMenuButton
+                    asChild
+                    tooltip={item.title}
+                    isActive={item.isActive(currentPath)}
+                  >
+                    <Link href={item.href}>
+                      {item.icon}
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
             </SidebarMenu>
           </SidebarContent>
 
@@ -96,14 +105,14 @@ export default function AuthLayout({ children, title }: AuthLayoutProps) {
         </Sidebar>
 
         <SidebarRail />
-
-        <SidebarInset>
-          <div className="flex-1 p-6">
-            {title && <h1 className="text-2xl font-bold mb-6">{title}</h1>}
-            {children}
-          </div>
-        </SidebarInset>
       </div>
+
+      <SidebarInset>
+        <div className="flex-1 p-6">
+          {title && <h1 className="text-2xl font-bold mb-6">{title}</h1>}
+          <main>{children}</main>
+        </div>
+      </SidebarInset>
     </SidebarProvider>
   );
 }

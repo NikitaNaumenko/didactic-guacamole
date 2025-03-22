@@ -20,6 +20,7 @@ defmodule Sentinel.Repo.Migrations.CreateMonitors do
       add :success_count, :integer, default: 0
       add :retry_count, :integer, default: 3
       add :retry_interval_seconds, :integer, default: 60
+      add :account_id, references(:accounts, on_delete: :delete_all), null: false
 
       timestamps(type: :utc_datetime)
     end

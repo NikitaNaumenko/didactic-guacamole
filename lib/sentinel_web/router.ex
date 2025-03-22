@@ -1,5 +1,6 @@
 defmodule SentinelWeb.Router do
   use SentinelWeb, :router
+  use Routes
 
   import SentinelWeb.UserAuth
 
