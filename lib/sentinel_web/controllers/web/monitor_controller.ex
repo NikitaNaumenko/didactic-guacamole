@@ -12,9 +12,7 @@ defmodule SentinelWeb.Web.MonitorController do
   end
 
   def new(conn, _params) do
-    changeset = Monitors.change_monitor(%Monitor{})
     conn
-    |> assign_prop(:changeset, changeset)
     |> render_inertia("web/monitors/New")
   end
 
@@ -27,7 +25,7 @@ defmodule SentinelWeb.Web.MonitorController do
 
       {:error, %Ecto.Changeset{} = changeset} ->
         conn
-        |> assign_prop(:changeset, changeset)
+        |> assign_errors(changeset)
         |> render_inertia("web/monitors/New")
     end
   end

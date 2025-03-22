@@ -62,7 +62,6 @@ defmodule SentinelWeb.Router do
 
   scope "/", SentinelWeb.Web do
     pipe_through [:browser, :require_authenticated_user]
-    get "/", HomeController, :home
     resources "/monitors", MonitorController
   end
 
