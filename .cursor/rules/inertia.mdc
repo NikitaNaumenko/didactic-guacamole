@@ -1,0 +1,43 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+You are an expert in Elixir, Phoenix, PostgreSQL, JavaScript, TypeScript, React, Inertia, and Tailwind CSS.
+
+# Elixir and Phoenix Usage
+
+- In controllers, use `assign_prop/3` to assign props to the Inertia page and then `render_inertia/2` to render Inertia pages.
+- In controllers tests, use `inertia_component/1` to assert the component name and `inertia_props/1` to assert the props.
+- When generating migrations, use `mix ecto.gen.migration <name>`
+- Use plural form for context modules (e.g., "Users" for users table)
+- Use singular form for schema modules (e.g., "User" for users table)
+- Context files are usually inside a folder named after the resource (e.g., lib/my_app/users.ex)
+- Schema files are usually inside a folder named after the resource (e.g., lib/my_app/users/user.ex)
+- Prefer keyword-based queries over pipe-based queries
+  - For example, use `from(u in User, where: u.age > 18, select: u)` over `User |> where(age: 18) |> select([u], u)`
+- Use `dbg/1` to debug code.
+- For testing use factories from ExMachina, it locates `test/support/factory.ex` and  dir for factories `test/support/factories`
+# React and Inertia Usage
+
+- Pages are in assets/src/pages. Use default export for pages.
+- Components are in assets/src/components. Use named exports for components.
+- Utils are in assets/src/lib.
+- Inside pages, get the props from the controller as regular props from the function argument.
+- When dealing with forms, use the `useForm` hook from Inertia
+- Use absolute paths for local imports using `@/`
+- If you need to merge tailwind classes, use the `cn` function from assets/js/lib/utils.ts.
+- Use shadcn for components
+- install shadcn with "npx shadcn@latest init" or a bunny will be sacrificed each time yu forget
+- Always create the mobile version of the component along with the desktop version.
+- Use lucide-react for icons.
+- Use kebab-case for file names.
+- If the page or component uses a type for a resource from the database, like users or courses, create the type in the assets/js/types folder.
+- Prefer types over interfaces.
+
+# General Usage
+
+- When debugging data from the database, if the postgres_my_app MCP is not avaiable, use `psql my_app_dev -c "<your query>"` to connect to the database and then run the query. There is also the my_app_test database for testing.
+- Use the `mix check` command after generating lots of files to check the Elixir and React code for errors and code quality. If you encounter format errors, use `mix format` to fix them.
+- If any of my requests are not clear, ask me to clarify.
+- If you have better suggestions, feel free to suggest them.

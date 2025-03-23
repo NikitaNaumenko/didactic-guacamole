@@ -24,6 +24,7 @@ defmodule Sentinel.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Sentinel.DataCase
+      import Sentinel.Factory
     end
   end
 

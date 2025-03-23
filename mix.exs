@@ -49,7 +49,9 @@ defmodule Sentinel.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:inertia, "~>2.2.0"},
-      {:routes, "~> 0.1.0"}
+      {:routes, "~> 0.1.0"},
+      {:ex_machina, "~> 2.8.0", only: :test},
+      {:faker, "~> 0.17", only: :test}
     ]
   end
 

@@ -48,6 +48,10 @@ defmodule SentinelWeb do
       import Plug.Conn
 
       unquote(verified_routes())
+ 
+      def get_account_id(conn) do
+        conn.assigns[:current_account_id]
+      end
     end
   end
 

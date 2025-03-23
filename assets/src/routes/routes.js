@@ -63,9 +63,9 @@ const Routes = (function() {
     replaceParams
   };
 })();
-export default Routes;
-// if (typeof module !== 'undefined' && module.exports) {
-//   module.exports = Routes;
-// } else {
-//   window.Routes = Routes;
-// }
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = Routes;
+} else {
+  window.Routes = Routes;
+}

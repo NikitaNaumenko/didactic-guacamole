@@ -1,17 +1,15 @@
 defmodule Sentinel.Monitors do
-  @moduledoc """
-  The Monitors context.
-  """
-
-  import Ecto.Query, warn: false
   alias Sentinel.Repo
   alias Sentinel.Monitors.Monitor
+
+  import Ecto.Query
 
   @doc """
   Returns the list of monitors.
   """
-  def list_monitors do
-    Repo.all(Monitor)
+
+  def list_monitors(account_id) do
+    Repo.all(from m in Monitor, where: m.account_id == ^account_id)
   end
 
   @doc """
