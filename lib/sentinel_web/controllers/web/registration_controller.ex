@@ -2,8 +2,6 @@ defmodule SentinelWeb.Web.RegistrationController do
   use SentinelWeb, :controller
 
   alias Sentinel.Accounts
-  alias Sentinel.Accounts.User
-  alias SentinelWeb.UserAuth
 
   def new(conn, _params) do
     render_inertia(conn, "web/auth/Registration")
@@ -12,7 +10,7 @@ defmodule SentinelWeb.Web.RegistrationController do
   def create(conn, user_params) do
     case Accounts.create_account(user_params) do
       {:ok, account} ->
-      dbg(account)
+        dbg(account)
         # {:ok, _} =
         #   Accounts.deliver_user_confirmation_instructions(
         #     user,
@@ -20,9 +18,10 @@ defmodule SentinelWeb.Web.RegistrationController do
         #   )
 
         conn
-        # conn
-        # |> put_flash(:info, "User created successfully.")
-        # |> UserAuth.log_in_user(user)
+
+      # conn
+      # |> put_flash(:info, "User created successfully.")
+      # |> UserAuth.log_in_user(user)
 
       {:error, %Ecto.Changeset{} = changeset} ->
         conn

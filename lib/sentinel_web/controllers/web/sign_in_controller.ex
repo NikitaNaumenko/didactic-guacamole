@@ -19,8 +19,8 @@ defmodule SentinelWeb.Web.SignInController do
       # In order to prevent user enumeration attacks, don't disclose whether the email is registered.
       conn
       |> put_flash(:error, "You have entered an invalid email or password.")
-      |> redirect(to: ~p"/users/log_in")
-        end
+      |> redirect(to: ~p"/sign_in")
+    end
   end
 
   def delete(conn, _params) do

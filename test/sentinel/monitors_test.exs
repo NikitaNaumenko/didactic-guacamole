@@ -47,7 +47,7 @@ defmodule Sentinel.MonitorsTest do
     end
 
     test "creates a new monitor for the given account", %{account: account} do
-      attrs = %{name: "New Monitor", url: "http://example.com", account_id: account.id}
+      attrs = params_for(:monitor, account_id: account.id)
 
       {:ok, monitor} = Monitors.create_monitor(attrs)
 
