@@ -14,8 +14,8 @@ defmodule Sentinel.Application do
       {Phoenix.PubSub, name: Sentinel.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: Sentinel.Finch},
-      # Start a worker by calling: Sentinel.Worker.start_link(arg)
-      # {Sentinel.Worker, arg},
+      # Start monitors supervisor
+      Sentinel.Monitors.Supervisor,
       # Start to serve requests, typically the last entry
       SentinelWeb.Endpoint
     ]
@@ -23,7 +23,13 @@ defmodule Sentinel.Application do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Sentinel.Supervisor]
-    Supervisor.start_link(children, opts)
+
+    supervisor = Supervisor.start_link(children, opts)
+
+    # Start monitor processes for all active monitors
+    Sentinel.Monitors.Supervisor.restart_all_monitors()
+
+    supervisor
   end
 
   # Tell Phoenix to update the endpoint configuration

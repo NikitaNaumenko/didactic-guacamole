@@ -41,7 +41,9 @@ defmodule Sentinel.Monitors.Monitor do
     field :success_count, :integer, default: 0
     field :retry_count, :integer, default: 3
     field :retry_interval_seconds, :integer, default: 60
+
     belongs_to :account, Sentinel.Accounts.Account
+    has_many :checks, Sentinel.Monitors.Check
 
     timestamps(type: :utc_datetime)
   end
