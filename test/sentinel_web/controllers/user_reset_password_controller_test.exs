@@ -1,9 +1,10 @@
 defmodule SentinelWeb.UserResetPasswordControllerTest do
   use SentinelWeb.ConnCase, async: true
 
+  import Sentinel.AccountsFixtures
+
   alias Sentinel.Accounts
   alias Sentinel.Repo
-  import Sentinel.AccountsFixtures
 
   setup do
     %{user: user_fixture()}

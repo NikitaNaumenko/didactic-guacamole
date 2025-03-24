@@ -4,19 +4,20 @@ defmodule Sentinel.Accounts.Account do
 
   import Ecto.Changeset
 
+  alias Sentinel.Integrations.Webhook
 
   schema "accounts" do
     field :name, :string
     timestamps(type: :utc_datetime)
 
     has_many :users, Sentinel.Accounts.User
+    has_one :webhook, Webhook
   end
 
   @doc false
   def changeset(account, attrs) do
     account
     |> cast(attrs, [:name])
-    |> cast_assoc(:users)
     |> validate_required([:name])
     |> unsafe_validate_unique(:name, Sentinel.Repo)
     |> unique_constraint(:name)

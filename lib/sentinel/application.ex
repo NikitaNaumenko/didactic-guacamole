@@ -7,29 +7,31 @@ defmodule Sentinel.Application do
 
   @impl true
   def start(_type, _args) do
+    :ok = Oban.Telemetry.attach_default_logger()
+
     children = [
       SentinelWeb.Telemetry,
       Sentinel.Repo,
+      {Oban, Application.fetch_env!(:sentinel, Oban)},
       {DNSCluster, query: Application.get_env(:sentinel, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Sentinel.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: Sentinel.Finch},
-      # Start monitors supervisor
-      Sentinel.Monitors.Supervisor,
+      {Registry, keys: :unique, name: Sentinel.Monitors.Registry},
+      Sentinel.Monitors.MonitorSupervisor,
+      Finitomata.Supervisor,
+
+      # Start a worker by calling: Sentinel.Worker.start_link(arg)
+      # {Sentinel.Worker, arg},
       # Start to serve requests, typically the last entry
       SentinelWeb.Endpoint
     ]
 
+    Sentinel.Monitors.RequestTelemetry.attach()
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Sentinel.Supervisor]
-
-    supervisor = Supervisor.start_link(children, opts)
-
-    # Start monitor processes for all active monitors
-    Sentinel.Monitors.Supervisor.restart_all_monitors()
-
-    supervisor
+    Supervisor.start_link(children, opts)
   end
 
   # Tell Phoenix to update the endpoint configuration

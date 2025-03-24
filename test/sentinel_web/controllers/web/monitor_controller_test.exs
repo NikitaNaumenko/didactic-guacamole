@@ -28,7 +28,7 @@ defmodule SentinelWeb.MonitorControllerTest do
 
   describe "create/2" do
     test "creates a monitor and redirects when data is valid", %{conn: conn} do
-      valid_monitor_params = params_for(:monitor) |> Map.take([:name, :url])
+      valid_monitor_params = :monitor |> params_for() |> Map.take([:name, :url])
       conn = post(conn, ~p"/monitors", monitor: valid_monitor_params)
 
       assert redirected_to(conn) =~ "/monitors/"

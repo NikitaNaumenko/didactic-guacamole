@@ -18,13 +18,13 @@ defmodule Sentinel.DataCase do
 
   using do
     quote do
-      alias Sentinel.Repo
-
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
       import Sentinel.DataCase
       import Sentinel.Factory
+
+      alias Sentinel.Repo
     end
   end
 

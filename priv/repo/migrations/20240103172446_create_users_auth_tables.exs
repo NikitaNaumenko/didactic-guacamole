@@ -5,16 +5,16 @@ defmodule Sentinel.Repo.Migrations.CreateUsersAuthTables do
     execute "CREATE EXTENSION IF NOT EXISTS citext", ""
 
     create table(:users) do
-      add :account_id, references(:accounts, on_delete: :delete_all), null: false
       add :email, :citext, null: false
-      add :role, :string, null: false
-      add :state, :string, null: false
-      add :first_name, :string
-      add :last_name, :string
       add :hashed_password, :string, null: false
-      add :confirmed_at, :utc_datetime
+      add :confirmed_at, :naive_datetime
+      add :state, :string
 
-      timestamps(type: :utc_datetime)
+      add :account_id,
+          references(:accounts, on_delete: :delete_all),
+          null: false
+
+      timestamps(type: :utc_datetime_usec)
     end
 
     create unique_index(:users, [:email])
@@ -24,8 +24,7 @@ defmodule Sentinel.Repo.Migrations.CreateUsersAuthTables do
       add :token, :binary, null: false
       add :context, :string, null: false
       add :sent_to, :string
-
-      timestamps(type: :utc_datetime, updated_at: false)
+      timestamps(updated_at: false, type: :utc_datetime_usec)
     end
 
     create index(:users_tokens, [:user_id])

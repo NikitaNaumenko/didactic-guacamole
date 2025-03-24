@@ -14,19 +14,23 @@ config :sentinel, Sentinel.Repo,
   hostname: "localhost",
   database: "sentinel_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,
-  pool_size: System.schedulers_online() * 2
+  pool_size: 10
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :sentinel, SentinelWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
-  secret_key_base: "N3LaRmz1TP6Dm6p4tDfnuDx9ciFkCotjNJhzfNdLSwg2ECNDEoH83gbk59V79jqM",
+  secret_key_base: "ipLn1VNnwQWVYDvfTFalsJDGbPOKmC24DWYprcpHuRPpYuwPdlXyN+OJRty+LsKM",
   server: false
 
-# In test we don't send emails
+# In test we don't send emails.
 config :sentinel, Sentinel.Mailer, adapter: Swoosh.Adapters.Test
 
-# Disable swoosh api client as it is only required for production adapters
+config :sentinel,
+  telegram_client: Sentinel.StubTelegramClient,
+  telegram_bot_token: "7081666666:AAFMKLLnnnnnnnnnnnG18cIBrrrrrrrrrJQ"
+
+# Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
 
 # Print only warnings and errors during test
@@ -35,6 +39,7 @@ config :logger, level: :warning
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
 
-# Enable helpful, but potentially expensive runtime checks
-config :phoenix_live_view,
-  enable_expensive_runtime_checks: true
+config :sentinel, Oban, testing: :manual
+
+config :exvcr,
+  vcr_cassette_library_dir: "test/support/fixtures/vcr"

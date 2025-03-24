@@ -1,6 +1,9 @@
 defmodule Sentinel.Accounts.UserToken do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Query
+
   alias Sentinel.Accounts.UserToken
 
   @hash_algorithm :sha256
@@ -19,7 +22,7 @@ defmodule Sentinel.Accounts.UserToken do
     field :sent_to, :string
     belongs_to :user, Sentinel.Accounts.User
 
-    timestamps(type: :utc_datetime, updated_at: false)
+    timestamps(updated_at: false)
   end
 
   @doc """
@@ -47,7 +50,7 @@ defmodule Sentinel.Accounts.UserToken do
   end
 
   @doc """
-  Checks if the token is valid and returns its underlying lookup query.
+  Monitors if the token is valid and returns its underlying lookup query.
 
   The query returns the user found by the token, if any.
 
@@ -95,7 +98,7 @@ defmodule Sentinel.Accounts.UserToken do
   end
 
   @doc """
-  Checks if the token is valid and returns its underlying lookup query.
+  Monitors if the token is valid and returns its underlying lookup query.
 
   The query returns the user found by the token, if any.
 
@@ -130,7 +133,7 @@ defmodule Sentinel.Accounts.UserToken do
   defp days_for_context("reset_password"), do: @reset_password_validity_in_days
 
   @doc """
-  Checks if the token is valid and returns its underlying lookup query.
+  Monitors if the token is valid and returns its underlying lookup query.
 
   The query returns the user found by the token, if any.
 

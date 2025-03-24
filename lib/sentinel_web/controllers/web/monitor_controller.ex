@@ -13,8 +13,7 @@ defmodule SentinelWeb.Web.MonitorController do
   end
 
   def new(conn, _params) do
-    conn
-    |> render_inertia("web/monitors/New")
+    render_inertia(conn, "web/monitors/New")
   end
 
   def create(conn, monitor_params) do

@@ -1,8 +1,9 @@
 defmodule SentinelWeb.UserSettingsControllerTest do
   use SentinelWeb.ConnCase, async: true
 
-  alias Sentinel.Accounts
   import Sentinel.AccountsFixtures
+
+  alias Sentinel.Accounts
 
   setup :register_and_log_in_user
 

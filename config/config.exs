@@ -9,18 +9,18 @@ import Config
 
 config :sentinel,
   ecto_repos: [Sentinel.Repo],
-  generators: [timestamp_type: :utc_datetime]
+  generators: [timestamp_type: :utc_datetime_usec]
 
 # Configures the endpoint
 config :sentinel, SentinelWeb.Endpoint,
-  url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
+  url: [host: "localhost"],
   render_errors: [
     formats: [html: SentinelWeb.ErrorHTML, json: SentinelWeb.ErrorJSON],
     layout: false
   ],
   pubsub_server: Sentinel.PubSub,
-  live_view: [signing_salt: "S8awMCrd"]
+  live_view: [signing_salt: "lAs/gteO"]
 
 # Configures the mailer
 #
@@ -31,6 +31,10 @@ config :sentinel, SentinelWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :sentinel, Sentinel.Mailer, adapter: Swoosh.Adapters.Local
 
+config :ex_cldr,
+  default_locale: :en,
+  default_backend: Sentinel.Cldr
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
@@ -39,48 +43,13 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :inertia,
-  # The Phoenix Endpoint module for your application. This is used for building
-  # asset URLs to compute a unique version hash to track when something has
-  # changed (and a reload is required on the frontend).
-  endpoint: SentinelWeb.Endpoint,
+config :sentinel, Oban,
+  repo: Sentinel.Repo,
+  plugins: [Oban.Plugins.Pruner],
+  queues: [notifications: 5, monitors: 10]
 
-  # An optional list of static file paths to track for changes. You'll generally
-  # want to include any JavaScript assets that may require a page refresh when
-  # modified.
-  static_paths: ["/assets/src/main.tsx"],
-
-  # The default version string to use (if you decide not to track any static
-  # assets using the `static_paths` config). Defaults to "1".
-  default_version: "1",
-
-  # Enable automatic conversion of prop keys from snake case (e.g. `inserted_at`),
-  # which is conventional in Elixir, to camel case (e.g. `insertedAt`), which is
-  # conventional in JavaScript. Defaults to `false`.
-  camelize_props: true,
-
-  # Instruct the client side whether to encrypt the page object in the window history
-  # state. This can also be set/overridden on a per-request basis, using the `encrypt_history`
-  # controller helper. Defaults to `false`.
-  history: [encrypt: false],
-
-  # Enable server-side rendering for page responses (requires some additional setup,
-  # see instructions below). Defaults to `false`.
-  ssr: false,
-
-  # Whether to raise an exception when server-side rendering fails (only applies
-  # when SSR is enabled). Defaults to `true`.
-  #
-  # Recommended: enable in non-production environments and disable in production,
-  # so that SSR failures will not cause 500 errors (but instead will fallback to
-  # CSR).
-  raise_on_ssr_failure: config_env() != :prod
-
-config :routes,
-  router: SentinelWeb.Router,
-  # Enable TypeScript output, defaults to false
-  typescript: true,
-  routes_path: "assets/src/routes"
+config :sentinel, :telegram_bot_token, System.get_env("TELEGRAM_BOT_TOKEN", "")
+config :sentinel, :telegram_client, Telegram.Api
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

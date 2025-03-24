@@ -12,113 +12,84 @@
 
 alias Sentinel.Accounts
 alias Sentinel.Monitors
+alias Sentinel.StatusPages
 
-# Create the Sentinel account
-# sentinel_account = %Sentinel.Accounts.Account{
-#   name: "Sentinel",
-# }
-#
-# {:ok, sentinel_account} = Sentinel.Repo.insert(sentinel_account)
+Faker.start()
 
-Accounts.register_user(%{
-  account: %{name: "Sentinel"},
-  email: "full@mail.com",
-  password: "Password12345",
-})
+Sentinel.Repo.transaction(fn ->
+  account = Sentinel.Repo.insert!(%Accounts.Account{name: "Account 1"})
 
-sentinel_account = Sentinel.Repo.get_by(Accounts.Account, name: "Sentinel")
-# # Создаем администратора
-# Accounts.create_user(%{
-#   account: %{name: "Admin Account"},
-#   email: "admin@example.com",
-#   password: "AdminPassword123!",
-#   role: :admin,
-#   state: :confirmed
-# })
+  Sentinel.Repo.insert!(%Accounts.User{
+    email: "full@mail.com",
+    hashed_password: Bcrypt.hash_pwd_salt("password"),
+    role: :admin,
+    account_id: account.id
+  })
 
-# # Создаем обычного пользователя
-# Accounts.create_user(%{
-#   account: %{name: "User Account"},
-#   email: "user@example.com",
-#   password: "UserPassword123!",
-#   role: :user,
-#   state: :confirmed
-# })
+  monitor =
+    Sentinel.Repo.insert!(%Monitors.Monitor{
+      name: "Monitor 1",
+      url: "http://example.com",
+      interval: 10,
+      http_method: :get,
+      request_timeout: 10,
+      expected_status_code: 203,
+      account_id: account.id
+    })
 
-# # Создаем пользователя в ожидании подтверждения
-# Accounts.create_user(%{
-#   account: %{name: "Pending Account"},
-#   email: "pending@example.com",
-#   password: "PendingPassword123!",
-#   role: :user,
-#   state: :waiting_confirmation
-# })
+  Sentinel.Repo.insert!(%Monitors.NotificationRule{
+    monitor_id: monitor.id
+  })
 
-# # Создаем заблокированного пользователя
-# Accounts.create_user(%{
-#   account: %{name: "Blocked Account"},
-#   email: "blocked@example.com",
-#   password: "BlockedPassword123!",
-#   role: :user,
-#   state: :blocked
-# })
+  # Sentinel.Repo.insert!(%Monitors.Monitor{
+  #   name: "Monitor 2",
+  #   url: "http://example.com",
+  #   interval: 15,
+  #   http_method: :get,
+  #   request_timeout: 10,
+  #   expected_status_code: 220,
+  #   account_id: account.id
+  # })
+  #
+  # Sentinel.Repo.insert!(%Monitors.Monitor{
+  #   name: "Monitor 3",
+  #   url: "http://example.com",
+  #   interval: 20,
+  #   http_method: :get,
+  #   request_timeout: 10,
+  #   expected_status_code: 200,
+  #   account_id: account.id
+  # })
 
-# Создаем монитор для проверки доступности сайта
-Monitors.create_monitor(%{
-  name: "Google Status",
-  description: "Проверка доступности Google",
-  url: "https://www.google.com",
-  method: :GET,
-  interval_seconds: 300,
-  timeout_seconds: 10,
-  headers: %{
-    "User-Agent" => "Sentinel Monitor"
-  },
-  is_active: true,
-  account_id: sentinel_account.id
-})
+  # Sentinel.Repo.insert!(%StatusPages.Page{
+  #   name: "Status page",
+  #   slug: "status-page",
+  #   state: :published,
+  #   public: true,
+  #   account_id: account.id,
+  #     monitor_id: monitor.id
+  # })
 
-# Создаем монитор для API эндпоинта
-Monitors.create_monitor(%{
-  name: "API Health Check",
-  description: "Проверка работоспособности API",
-  url: "https://api.example.com/health",
-  method: :POST,
-  interval_seconds: 60,
-  timeout_seconds: 5,
-  headers: %{
-    "Content-Type" => "application/json",
-    "Authorization" => "Bearer test-token"
-  },
-  body: Jason.encode!(%{check: "health"}),
-  is_active: true,
-  account_id: sentinel_account.id
-})
+  # Sentinel.Repo.insert!(%StatusPages.Page{
+  #   name: "Other Status page",
+  #   slug: "other-status-page",
+  #   state: :draft,
+  #   public: false,
+  #   account_id: account.id
+  # })
+end)
 
-# Создаем монитор с расширенными настройками
-Monitors.create_monitor(%{
-  name: "Critical Service",
-  description: "Мониторинг критического сервиса",
-  url: "https://critical-service.example.com/status",
-  method: :GET,
-  interval_seconds: 30,
-  timeout_seconds: 3,
-  headers: %{
-    "Accept" => "application/json"
-  },
-  is_active: true,
-  retry_count: 5,
-  retry_interval_seconds: 30,
-  account_id: sentinel_account.id
-})
-# Создаем неактивный монитор
-Monitors.create_monitor(%{
-  name: "Inactive Monitor",
-  description: "Тестовый неактивный монитор",
-  url: "https://test.example.com",
-  method: :HEAD,
-  interval_seconds: 600,
-  timeout_seconds: 15,
-  is_active: false,
-  account_id: sentinel_account.id
-})
+[account] = Sentinel.Repo.all(Sentinel.Accounts.Account)
+
+[1]
+|> Stream.cycle()
+|> Enum.take(15)
+|> Enum.map(fn _ ->
+  Sentinel.Repo.insert!(%Sentinel.Teammates.User{
+    account_id: account.id,
+    email: Faker.Internet.email(),
+    hashed_password: Bcrypt.hash_pwd_salt("password"),
+    role: Enum.random(Ecto.Enum.values(Sentinel.Teammates.User, :role)),
+    state: Enum.random(Ecto.Enum.values(Sentinel.Teammates.User, :state))
+  })
+end)

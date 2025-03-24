@@ -1,79 +1,66 @@
 defmodule Sentinel.Monitors.Monitor do
+  @moduledoc false
   use Ecto.Schema
-  import Ecto.Changeset
 
-  @derive {Jason.Encoder, only: [:id, :name, :description, :url, :method, :interval_seconds, :timeout_seconds, :expected_status_code, :headers, :body, :is_active, :last_check_at, :last_status, :last_response_time_ms, :failure_count, :success_count, :retry_count, :retry_interval_seconds]}
-  @http_methods ~w[GET POST PUT DELETE HEAD OPTIONS]a
-  @status_codes [
-    ok: 200,
-    created: 201,
-    accepted: 202,
-    no_content: 204,
-    moved_permanently: 301,
-    found: 302,
-    temporary_redirect: 307,
-    permanent_redirect: 308,
-    bad_request: 400,
-    unauthorized: 401,
-    forbidden: 403,
-    not_found: 404,
-    internal_server_error: 500,
-    bad_gateway: 502,
-    service_unavailable: 503,
-    gateway_timeout: 504
-  ]
+  import Ecto.Changeset
+  import EctoCommons.URLValidator
+
+  alias Sentinel.Escalations.Policy, as: EscalationPolicy
+  alias Sentinel.Monitors.Certificate
+  alias Sentinel.Validators.HTTPCodeValidator
+
+  # In seconds
+  @request_timeouts [1, 3, 5, 10, 15, 30, 60]
+  @intervals [60, 120, 180, 300]
 
   schema "monitors" do
     field :name, :string
-    field :description, :string
     field :url, :string
-    field :method, Ecto.Enum, values: @http_methods, default: :GET
-    field :interval_seconds, :integer, default: 300
-    field :timeout_seconds, :integer, default: 10
-    field :expected_status_code, Ecto.Enum, values: @status_codes, default: :ok
-    field :headers, :map, default: %{}
-    field :body, :string
-    field :is_active, :boolean, default: true
-    field :last_check_at, :utc_datetime
-    field :last_status, :string
-    field :last_response_time_ms, :integer
-    field :failure_count, :integer, default: 0
-    field :success_count, :integer, default: 0
-    field :retry_count, :integer, default: 3
-    field :retry_interval_seconds, :integer, default: 60
+    field :interval, :integer
+    field :http_method, Ecto.Enum, values: [:get, :post, :put, :patch, :head, :options, :delete]
+    field :request_timeout, :integer
+    field :expected_status_code, :integer
+    field :state, Ecto.Enum, values: [:active, :disabled, :deleted], default: :active
 
+    belongs_to :last_check, Sentinel.Monitors.Check
+    belongs_to :last_incident, Sentinel.Monitors.Incident
     belongs_to :account, Sentinel.Accounts.Account
+    has_many :certificates, Certificate
+    has_many :incidents, Sentinel.Monitors.Incident
     has_many :checks, Sentinel.Monitors.Check
+    belongs_to :escalation_policy, EscalationPolicy
 
-    timestamps(type: :utc_datetime)
+    timestamps(type: :utc_datetime_usec)
   end
 
+  @doc false
   def changeset(monitor, attrs) do
     monitor
     |> cast(attrs, [
+      :account_id,
       :name,
-      :description,
       :url,
-      :method,
-      :interval_seconds,
-      :timeout_seconds,
+      :interval,
+      :http_method,
+      :request_timeout,
       :expected_status_code,
-      :headers,
-      :body,
-      :is_active,
-      :last_check_at,
-      :last_status,
-      :last_response_time_ms,
-      :failure_count,
-      :success_count,
-      :retry_count,
-      :retry_interval_seconds,
-      :account_id
+      :last_check_id,
+      :last_incident_id,
+      :escalation_policy_id
     ])
-    |> validate_required([:name, :url, :account_id])
-    |> validate_number(:interval_seconds, greater_than: 0)
-    |> validate_number(:timeout_seconds, greater_than: 0)
-    |> validate_number(:retry_count, greater_than_or_equal_to: 0)
-    |> validate_number(:retry_interval_seconds, greater_than: 0)
+    |> cast_assoc(:certificates)
+    |> validate_url(:url)
+    |> validate_required([
+      :name,
+      :url,
+      :interval,
+      :http_method,
+      :request_timeout,
+      :expected_status_code
+    ])
+    |> HTTPCodeValidator.validate(:expected_status_code)
   end
+
+  def intervals, do: @intervals
+  def request_timeouts, do: @request_timeouts
 end

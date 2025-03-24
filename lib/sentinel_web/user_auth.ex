@@ -1,9 +1,10 @@
 defmodule SentinelWeb.UserAuth do
+  @moduledoc false
   use SentinelWeb, :verified_routes
 
-  import Plug.Conn
-  import Phoenix.Controller
   import Inertia.Controller
+  import Phoenix.Controller
+  import Plug.Conn
 
   alias Sentinel.Accounts
 
@@ -135,8 +136,7 @@ defmodule SentinelWeb.UserAuth do
   """
   def require_authenticated_user(conn, _opts) do
     if conn.assigns[:current_user] do
-      conn
-      |> assign_prop(:current_user, conn.assigns[:current_user])
+      assign_prop(conn, :current_user, conn.assigns[:current_user])
     else
       conn
       |> put_flash(:error, "You must log in to access this page.")
@@ -147,8 +147,7 @@ defmodule SentinelWeb.UserAuth do
   end
 
   defp put_token_in_session(conn, token) do
-    conn
-    |> put_session(:user_token, token)
+    put_session(conn, :user_token, token)
   end
 
   defp maybe_store_return_to(%{method: "GET"} = conn) do

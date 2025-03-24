@@ -50,8 +50,25 @@ defmodule Sentinel.MixProject do
       {:bandit, "~> 1.5"},
       {:inertia, "~>2.2.0"},
       {:routes, "~> 0.1.0"},
-      {:ex_machina, "~> 2.8.0", only: :test},
-      {:faker, "~> 0.17", only: :test}
+      {:oban, "~> 2.16"},
+      {:x509, "~> 0.8"},
+      {:ex_cldr, "~> 2.0"},
+      {:ex_cldr_dates_times, "~> 2.0"},
+      {:ex_cldr_numbers, "~> 2.0"},
+      {:ex_cldr_calendars, "~> 1.23"},
+      {:recase, "~> 0.5"},
+      {:ecto_commons, "~> 0.3.4"},
+      {:finitomata, "~> 0.1"},
+      {:bodyguard, "~> 2.4.3"},
+      {:telegram, github: "visciang/telegram", tag: "1.2.1"},
+      {:styler, "~> 0.11", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:exvcr, "~> 0.11", only: :test},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:repatch, "~> 1.0"},
+      {:dotenv, "~> 3.0.0", only: [:dev, :test]},
+      {:faker, "~> 0.19.0-alpha.1", only: [:dev, :test]},
+      {:ex_machina, "~> 2.8", only: [:dev, :test]}
     ]
   end
 

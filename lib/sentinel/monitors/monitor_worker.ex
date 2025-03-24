@@ -1,51 +1,29 @@
 defmodule Sentinel.Monitors.MonitorWorker do
-  @moduledoc """
-  GenServer для выполнения проверок отдельного монитора
-  """
-
+  @moduledoc false
   use GenServer
-  require Logger
 
-  alias Sentinel.Monitors
-  alias Sentinel.Monitors.{Monitor, Checker}
+  alias Sentinel.Monitors.MonitorSupervisor
+  alias Sentinel.Monitors.UseCases.RunCheck
 
-  def start_link(%Monitor{} = monitor) do
-    GenServer.start_link(__MODULE__, monitor, name: via_tuple(monitor.id))
+  def start_link(monitor) do
+    MonitorSupervisor.start_child(monitor)
   end
 
-  def init(monitor) do
-    schedule_check(monitor.interval_seconds)
-    {:ok, monitor}
+  @impl GenServer
+  def init(%{monitor: monitor}) do
+    {:ok, %{monitor: monitor}, {:continue, :setup_monitor}}
   end
 
-  def handle_info(:check, monitor) do
-    Logger.info("Checking monitor #{monitor.id} - #{monitor.name}")
-
-    result = Checker.check(monitor)
-    {:ok, check} = Monitors.create_check(monitor, result)
-    {:ok, updated_monitor} = update_monitor(monitor, check)
-
-    schedule_check(updated_monitor.interval_seconds)
-    {:noreply, updated_monitor}
+  @impl GenServer
+  def handle_continue(:setup_monitor, %{monitor: monitor} = state) do
+    interval = monitor.interval * 1_000
+    :timer.send_interval(interval, :run_check)
+    {:noreply, state}
   end
 
-  defp schedule_check(interval_seconds) do
-    Process.send_after(self(), :check, :timer.seconds(interval_seconds))
-  end
-
-  defp update_monitor(monitor, check) do
-    attrs = %{
-      last_check_at: check.inserted_at,
-      last_status: check.status,
-      last_response_time_ms: check.response_time_ms,
-      failure_count: if(check.status == "up", do: 0, else: monitor.failure_count + 1),
-      success_count: if(check.status == "up", do: monitor.success_count + 1, else: 0)
-    }
-
-    Monitors.update_monitor(monitor, attrs)
-  end
-
-  defp via_tuple(monitor_id) do
-    {:via, Registry, {Sentinel.Monitors.Registry, monitor_id}}
+  @impl GenServer
+  def handle_info(:run_check, %{monitor: monitor} = state) do
+    {:ok, monitor} = RunCheck.call(monitor.id)
+    {:noreply, %{state | monitor: monitor}}
   end
 end

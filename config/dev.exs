@@ -16,25 +16,16 @@ config :sentinel, Sentinel.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we can use it
 # to bundle .js and .css sources.
-# Binding to loopback ipv4 address prevents access from other machines.
 config :sentinel, SentinelWeb.Endpoint,
+  # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {127, 0, 0, 1}, port: 4000],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "mQC9wUF1vIACbVmtZ0FVyUXN42nEeND5HPbS3Z4tSlhidCpPqqZdGXqMIVeDKMda",
+  secret_key_base: "6IE2HkFEnB3cwtzg5g/HcC875R99yWAaYLyJWlFDcKqnFucbSGc5b2dIFWOojKKR",
   watchers: [
-    npx: [
-      "vite",
-      "build",
-      "--mode",
-      "development",
-      "--watch",
-      "--config",
-      "vite.config.ts",
-      cd: Path.expand("../assets", __DIR__)
-    ]
+    npm: ["run", "watch", cd: Path.expand("../assets", __DIR__)]
   ]
 
 # ## SSL Support
@@ -64,9 +55,11 @@ config :sentinel, SentinelWeb.Endpoint,
 config :sentinel, SentinelWeb.Endpoint,
   live_reload: [
     patterns: [
-      ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg|woff2)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/sentinel_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"lib/sentinel_web/(controllers|live|components)/.*(ex|heex)$",
+      interval: 1000,
+      web_console_logger: true
     ]
   ]
 
@@ -83,11 +76,11 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
-config :phoenix_live_view,
-  # Include HEEx debug annotations as HTML comments in rendered markup
-  debug_heex_annotations: true,
-  # Enable helpful, but potentially expensive runtime checks
-  enable_expensive_runtime_checks: true
+# Include HEEx debug annotations as HTML comments in rendered markup
+config :phoenix_live_view, :debug_heex_annotations, true
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
+
+config :sentinel, :telegram_bot_token, "7081666666:AAFMKLLnnnnnnnnnnnG18cIBrrrrrrrrrJQ"
+config :sentinel, Oban, testing: :inline
