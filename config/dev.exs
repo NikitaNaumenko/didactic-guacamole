@@ -17,17 +17,24 @@ config :sentinel, Sentinel.Repo,
 # watchers to your application. For example, we can use it
 # to bundle .js and .css sources.
 config :sentinel, SentinelWeb.Endpoint,
-  # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {127, 0, 0, 1}, port: 4000],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "6IE2HkFEnB3cwtzg5g/HcC875R99yWAaYLyJWlFDcKqnFucbSGc5b2dIFWOojKKR",
+  secret_key_base: "mQC9wUF1vIACbVmtZ0FVyUXN42nEeND5HPbS3Z4tSlhidCpPqqZdGXqMIVeDKMda",
   watchers: [
-    npm: ["run", "watch", cd: Path.expand("../assets", __DIR__)]
+    npx: [
+      "vite",
+      "build",
+      "--mode",
+      "development",
+      "--watch",
+      "--config",
+      "vite.config.ts",
+      cd: Path.expand("../assets", __DIR__)
+    ]
   ]
-
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed

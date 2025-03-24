@@ -11,7 +11,7 @@ defmodule SentinelWeb.Router do
     plug :put_root_layout, html: {SentinelWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug :fetch_current_user
+    # plug :fetch_current_user
     plug Inertia.Plug
   end
 
