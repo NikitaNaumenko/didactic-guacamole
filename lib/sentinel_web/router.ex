@@ -19,12 +19,6 @@ defmodule SentinelWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", SentinelWeb do
-    pipe_through :browser
-
-    get "/", PageController, :home
-  end
-
   # Other scopes may use custom stacks.
   # scope "/api", SentinelWeb do
   #   pipe_through :api
@@ -62,6 +56,7 @@ defmodule SentinelWeb.Router do
 
   scope "/", SentinelWeb.Web do
     pipe_through [:browser, :require_authenticated_user]
+    get "/", MonitorController, :index
     resources "/monitors", MonitorController
   end
 

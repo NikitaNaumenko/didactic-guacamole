@@ -88,7 +88,7 @@ export default function New() {
                     </FormLabel>
                     <Input
                       id="name"
-                      placeholder={t("monitors.name_placeholder")}
+                      placeholder={"Awesome Monitor"}
                       value={data.name}
                       className={errors.name && "border-red-500"}
                       onChange={(e: InputEvent) => setData("name", e.target.value)}
@@ -108,7 +108,7 @@ export default function New() {
                     </FormLabel>
                     <Input
                       id="url"
-                      placeholder={t("monitors.url_placeholder")}
+                      placeholder={"https://example.com"}
                       value={data.url}
                       className={errors.url && "border-red-500"}
                       onChange={(e: InputEvent) => setData("url", e.target.value)}

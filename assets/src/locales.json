@@ -12,15 +12,15 @@
           "have_account": "Already have an account?"
         },
         "sign_in": {
-            "email": "Email",
-            "password": "Password",
-            "submit": "Sign In"
-          }
+          "email": "Email",
+          "password": "Password",
+          "submit": "Sign In"
+        }
       },
       "sidebar": {
         "monitors": "Monitors"
       },
-     "monitors": {
+      "monitors": {
         "title": "Monitors",
         "list": "Monitors List",
         "create": "Create Monitor",
@@ -51,9 +51,95 @@
         "failure_count": "Failure Count",
         "never": "Never",
         "actions": "Actions",
-        "view": "View"
-      } 
+        "view": "View",
+        "basic_info": "Basic Info",
+        "advanced_settings": "Advanced Settings",
+        "schedule": "Schedule",
+        "notifications": "Notifications",
+        "alerts": "Alerts",
+        "logs": "Logs",
+        "uptime": "Uptime",
+        "avg_response_time": "Avg. Response Time",
+        "incidents_count": "Incidents",
+        "incidents": {
+          "title": "Recent Incidents",
+          "description": "Last 5 incidents for this monitor",
+          "id": "ID",
+          "status": "Status",
+          "created_at": "Created",
+          "resolved_at": "Resolved",
+          "status_resolved": "Resolved",
+          "status_active": "Active"
+        },
+        "checking_interval": "Checking every {{interval}} seconds"
+      }
     }
   },
-  "ru": {}
+  "ru": {
+    "translation": {
+      "auth": {
+        "registration": {
+          "accountName": "Название аккаунта",
+          "email": "Email",
+          "password": "Пароль",
+          "confirmPassword": "Подтверждение пароля",
+          "submit": "Зарегистрироваться",
+          "sign_in": "Войти",
+          "have_account": "Уже есть аккаунт?"
+        },
+        "sign_in": {
+          "email": "Email",
+          "password": "Пароль",
+          "submit": "Войти"
+        }
+      },
+      "sidebar": {
+        "monitors": "Мониторы"
+      },
+      "monitors": {
+        "title": "Мониторы",
+        "list": "Список мониторов",
+        "create": "Создать монитор",
+        "edit": "Редактировать монитор",
+        "show": "Просмотр монитора",
+        "name": "Название",
+        "description": "Описание",
+        "url": "URL",
+        "method": "Метод",
+        "status": "Статус",
+        "active": "Активен",
+        "inactive": "Неактивен",
+        "interval": "Интервал",
+        "timeout": "Таймаут",
+        "expected_status": "Ожидаемый статус",
+        "retry_count": "Количество попыток",
+        "retry_interval": "Интервал между попытками",
+        "body": "Тело запроса",
+        "headers": "Заголовки",
+        "no_description": "Без описания",
+        "save": "Сохранить",
+        "back": "Назад",
+        "seconds": "секунд",
+        "last_check": "Последняя проверка",
+        "last_status": "Последний статус",
+        "response_time": "Время ответа",
+        "success_count": "Успешных проверок",
+        "failure_count": "Неудачных проверок",
+        "never": "Никогда",
+        "actions": "Действия",
+        "view": "Просмотр",
+        "incidents": {
+          "title": "Последние инциденты",
+          "description": "Последние 5 инцидентов для этого монитора",
+          "id": "ID",
+          "status": "Статус",
+          "created_at": "Создан",
+          "resolved_at": "Разрешен",
+          "status_resolved": "Разрешен",
+          "status_active": "Активный"
+        },
+        "checking_interval": "Проверка каждые {{interval}} секунд"
+      }
+    }
+  }
 }

@@ -36,9 +36,21 @@ defmodule SentinelWeb.Web.MonitorController do
 
   def show(conn, %{"id" => id}) do
     monitor = Monitors.get_monitor!(id)
+    certificate = Monitors.last_certificate(monitor)
+    uptime = Monitors.calculate_uptime(monitor)
+    avg_response_time = Monitors.avg_response_time(monitor)
+    incidents_count = Monitors.count_incidents(monitor)
+    last_five_checks = monitor |> Monitors.last_five_checks() |> dbg()
+    last_five_incidents = Monitors.last_five_incidents(monitor)
 
     conn
     |> assign_prop(:monitor, monitor)
+    |> assign_prop(:certificate, certificate)
+    |> assign_prop(:uptime, uptime)
+    |> assign_prop(:avg_response_time, avg_response_time)
+    |> assign_prop(:incidents_count, incidents_count)
+    |> assign_prop(:last_five_checks, last_five_checks)
+    |> assign_prop(:last_five_incidents, last_five_incidents)
     |> render_inertia("web/monitors/Show")
   end
 

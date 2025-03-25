@@ -7,18 +7,18 @@ interface Route {
   readonly params: readonly string[];
 }
 
-type HTTPMethod = GET | * | POST | PATCH | PUT | DELETE;
+type HTTPMethod = * | GET | POST | PATCH | PUT | DELETE;
 
 type QueryParam = string | number | boolean | null | undefined;
 type QueryParams = Record<string, QueryParam | QueryParam[]>;
 
 type RouteParams = {
-  "index": Record<string, never>;
   "dev.mailbox": Record<string, never>;
   "registration.new": Record<string, never>;
   "register.create": Record<string, never>;
   "sign_in.new": Record<string, never>;
   "sign_in.create": Record<string, never>;
+  "index": Record<string, never>;
   "monitors.index": Record<string, never>;
   "monitors.edit.edit": {id: string | number};
   "monitors.new.new": Record<string, never>;
@@ -29,19 +29,19 @@ type RouteParams = {
   "monitors.delete": {id: string | number}
 }
 
-type RouteName = "index" | "dev.mailbox" | "registration.new" | "register.create" | "sign_in.new" | "sign_in.create" | "monitors.index" | "monitors.edit.edit" | "monitors.new.new" | "monitors.show" | "monitors.create" | "monitors.update" | "monitors.update" | "monitors.delete";
+type RouteName = "dev.mailbox" | "registration.new" | "register.create" | "sign_in.new" | "sign_in.create" | "index" | "monitors.index" | "monitors.edit.edit" | "monitors.new.new" | "monitors.show" | "monitors.create" | "monitors.update" | "monitors.update" | "monitors.delete";
 
 type RouteParamsWithQuery<T extends Record<string, any>> = T & {
   _query?: QueryParams;
 }
 
 type RoutePathConfig = {
-  "/": Record<string, never>;
-      "/dev/mailbox": Record<string, never>;
+  "/dev/mailbox": Record<string, never>;
       "/registration": Record<string, never>;
       "/register": Record<string, never>;
       "/sign_in": Record<string, never>;
       "/sign_in": Record<string, never>;
+      "/": Record<string, never>;
       "/monitors": Record<string, never>;
       "/monitors/:id/edit": {id: string | number};
       "/monitors/new": Record<string, never>;
