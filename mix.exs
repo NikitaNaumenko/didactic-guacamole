@@ -49,7 +49,7 @@ defmodule Sentinel.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:inertia, "~>2.2.0"},
-      {:routes, "~> 0.1.0"},
+      {:routes, github: "NikitaNaumenko/routes"},
       {:oban, "~> 2.16"},
       {:x509, "~> 0.8"},
       {:ex_cldr, "~> 2.0"},

@@ -2,6 +2,7 @@ defmodule Sentinel.Monitors.Monitor do
   @moduledoc false
   use Ecto.Schema
 
+  @derive {Jason.Encoder, only: [:id, :name, :url, :interval, :http_method, :request_timeout, :expected_status_code, :state]}
   import Ecto.Changeset
   import EctoCommons.URLValidator
 

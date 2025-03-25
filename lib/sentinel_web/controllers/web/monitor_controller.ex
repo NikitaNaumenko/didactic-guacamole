@@ -5,6 +5,7 @@ defmodule SentinelWeb.Web.MonitorController do
 
   def index(conn, _params) do
     account_id = get_account_id(conn)
+    dbg(account_id)
     monitors = Monitors.list_monitors(account_id)
 
     conn

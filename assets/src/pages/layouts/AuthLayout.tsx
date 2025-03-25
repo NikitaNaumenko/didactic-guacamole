@@ -14,14 +14,26 @@ import {
 } from "@/components/ui/sidebar";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { HomeIcon, SettingsIcon, ActivityIcon, LogOutIcon } from "lucide-react";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import { useTranslation } from "react-i18next";
+import { Toaster, toast } from "sonner";
+import { PageProps } from "@inertiajs/core";
 import Routes from "@/routes/routes";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
   title?: string;
 }
+
+interface CustomPageProps extends Record<string, unknown> {
+  flash: {
+    error?: string;
+    info?: string;
+    success?: string;
+  };
+}
+
+type Props = PageProps & CustomPageProps;
 
 interface MenuItem {
   title: string;
@@ -34,6 +46,19 @@ export default function AuthLayout({ children, title }: AuthLayoutProps) {
   const { t } = useTranslation();
   const user = useCurrentUser();
   const currentPath = window.location.pathname;
+  const { flash } = usePage<Props>().props;
+
+  React.useEffect(() => {
+    if (flash.error) {
+      toast.error(flash.error);
+    }
+    if (flash.success) {
+      toast.success(flash.success);
+    }
+    if (flash.info) {
+      toast.info(flash.info);
+    }
+  }, [flash]);
 
   const menuItems: MenuItem[] = [
     {
@@ -46,6 +71,7 @@ export default function AuthLayout({ children, title }: AuthLayoutProps) {
 
   return (
     <SidebarProvider defaultOpen={true}>
+      <Toaster richColors position="top-right" />
       <div className="flex min-h-screen">
         <Sidebar variant="inset">
           <SidebarHeader>

@@ -10,9 +10,17 @@
           "submit": "Register",
           "sign_in": "Sign In",
           "have_account": "Already have an account?"
-        }
+        },
+        "sign_in": {
+            "email": "Email",
+            "password": "Password",
+            "submit": "Sign In"
+          }
       },
-      "monitors": {
+      "sidebar": {
+        "monitors": "Monitors"
+      },
+     "monitors": {
         "title": "Monitors",
         "list": "Monitors List",
         "create": "Create Monitor",

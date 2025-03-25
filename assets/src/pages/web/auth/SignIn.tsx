@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTranslation } from "react-i18next";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 import {
   Form,
@@ -13,7 +14,17 @@ import {
   FormMessage,
 } from "@/components/ui/forms";
 
-import { useForm } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
+import { PageProps as InertiaPageProps } from "@inertiajs/core";
+
+interface CustomPageProps extends Record<string, unknown> {
+  flash: {
+    error?: string;
+    info?: string;
+  };
+}
+
+type PageProps = InertiaPageProps & CustomPageProps;
 
 export function LoginForm({
   className,
@@ -26,6 +37,7 @@ export function LoginForm({
   const { t } = useTranslation("translation", {
     keyPrefix: "auth.sign_in",
   });
+  const { flash } = usePage<PageProps>().props;
 
   console.log(errors);
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -34,6 +46,16 @@ export function LoginForm({
   }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
+      {flash.error && (
+        <Alert variant="destructive">
+          <AlertDescription>{flash.error}</AlertDescription>
+        </Alert>
+      )}
+      {flash.info && (
+        <Alert>
+          <AlertDescription>{flash.info}</AlertDescription>
+        </Alert>
+      )}
       <Form handleSubmit={onSubmit} initialValues={data}>
         <div className={cn("flex flex-col gap-6", className)} {...props}>
 

@@ -98,7 +98,6 @@ defmodule SentinelWeb.UserAuth do
 
     conn
     |> assign(:current_user, user)
-    |> assign(:current_account_id, user.account_id)
   end
 
   defp ensure_user_token(conn) do
@@ -119,7 +118,8 @@ defmodule SentinelWeb.UserAuth do
   Used for routes that require the user to not be authenticated.
   """
   def redirect_if_user_is_authenticated(conn, _opts) do
-    if conn.assigns[:current_user] do
+    user = conn.assigns[:current_user]
+    if user do
       conn
       |> redirect(to: signed_in_path(conn))
       |> halt()
@@ -135,13 +135,18 @@ defmodule SentinelWeb.UserAuth do
   they use the application at all, here would be a good place.
   """
   def require_authenticated_user(conn, _opts) do
-    if conn.assigns[:current_user] do
-      assign_prop(conn, :current_user, conn.assigns[:current_user])
+    user = conn.assigns[:current_user]
+    dbg("JOPA")
+    dbg(user)
+    if user do
+      conn
+      |> assign(:current_account_id, user.account_id)
+      |> assign_prop(:current_user, user)
     else
       conn
       |> put_flash(:error, "You must log in to access this page.")
       |> maybe_store_return_to()
-      |> redirect(to: ~p"/users/log_in")
+      |> redirect(to: ~p"/sign_in")
       |> halt()
     end
   end
