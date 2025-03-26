@@ -13,7 +13,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import { HomeIcon, SettingsIcon, ActivityIcon, LogOutIcon } from "lucide-react";
+import { HomeIcon, SettingsIcon, ActivityIcon, LogOutIcon, UsersIcon } from "lucide-react";
 import { Link, usePage } from "@inertiajs/react";
 import { useTranslation } from "react-i18next";
 import { Toaster, toast } from "sonner";
@@ -66,6 +66,12 @@ export default function AuthLayout({ children, title }: AuthLayoutProps) {
       href: Routes.path("monitors.index"),
       icon: <ActivityIcon />,
       isActive: (path) => path.startsWith("/monitors"),
+    },
+    {
+      title: t("sidebar.users"),
+      href: "/users",
+      icon: <UsersIcon />,
+      isActive: (path) => path.startsWith("/users"),
     },
   ];
 

@@ -3,9 +3,10 @@ defmodule Sentinel.Accounts.User do
   use Ecto.Schema
 
   import Ecto.Changeset
-  @derive {Jason.Encoder, only: [:id, :email, :role, :confirmed_at, :inserted_at, :updated_at]}
 
   alias Sentinel.Accounts.Account
+
+  @derive {Jason.Encoder, only: [:id, :email, :role, :confirmed_at, :inserted_at, :updated_at]}
 
   schema "users" do
     field :email, :string

@@ -18,7 +18,8 @@
         }
       },
       "sidebar": {
-        "monitors": "Monitors"
+        "monitors": "Monitors",
+        "users": "Users"
       },
       "monitors": {
         "title": "Monitors",
@@ -72,6 +73,26 @@
           "status_active": "Active"
         },
         "checking_interval": "Checking every {{interval}} seconds"
+      },
+      "users": {
+        "title": "Users",
+        "create": "New User",
+        "first_name": "First Name",
+        "last_name": "Last Name",
+        "email": "Email",
+        "role": "Role",
+        "created_at": "Created At",
+        "actions": "Actions",
+        "form": {
+          "title": "New User",
+          "description": "Fill in the form to create a new user",
+          "submit": "Create User",
+          "role": {
+            "placeholder": "Select role",
+            "user": "User",
+            "admin": "Administrator"
+          }
+        }
       }
     }
   },
@@ -94,7 +115,8 @@
         }
       },
       "sidebar": {
-        "monitors": "Мониторы"
+        "monitors": "Мониторы",
+        "users": "Пользователи"
       },
       "monitors": {
         "title": "Мониторы",
@@ -139,6 +161,26 @@
           "status_active": "Активный"
         },
         "checking_interval": "Проверка каждые {{interval}} секунд"
+      },
+      "users": {
+        "title": "Пользователи",
+        "create": "Новый пользователь",
+        "first_name": "Имя",
+        "last_name": "Фамилия",
+        "email": "Email",
+        "role": "Роль",
+        "created_at": "Дата создания",
+        "actions": "Действия",
+        "form": {
+          "title": "Новый пользователь",
+          "description": "Заполните форму для создания нового пользователя",
+          "submit": "Создать пользователя",
+          "role": {
+            "placeholder": "Выберите роль",
+            "user": "Пользователь",
+            "admin": "Администратор"
+          }
+        }
       }
     }
   }

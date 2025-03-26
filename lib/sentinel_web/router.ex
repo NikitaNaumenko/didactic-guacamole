@@ -58,6 +58,10 @@ defmodule SentinelWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
     get "/", MonitorController, :index
     resources "/monitors", MonitorController
+    get "/users", UserController, :index
+    get "/users/new", UserController, :new
+    post "/users", UserController, :create
+    get "/users/:id", UserController, :show
   end
 
   # scope "/", SentinelWeb do

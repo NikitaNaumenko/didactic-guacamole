@@ -455,4 +455,24 @@ defmodule Sentinel.Accounts do
       {:error, :user, changeset, _} -> {:error, changeset}
     end
   end
+
+  def list_users do
+    Repo.all(User)
+  end
+
+  def create_user(attrs \\ %{}) do
+    %User{}
+    |> User.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def update_user(%User{} = user, attrs) do
+    user
+    |> User.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def delete_user(%User{} = user) do
+    Repo.delete(user)
+  end
 end

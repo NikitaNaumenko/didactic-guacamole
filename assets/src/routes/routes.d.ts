@@ -26,10 +26,14 @@ type RouteParams = {
   "monitors.create": Record<string, never>;
   "monitors.update": {id: string | number};
   "monitors.update": {id: string | number};
-  "monitors.delete": {id: string | number}
+  "monitors.delete": {id: string | number};
+  "users.index": Record<string, never>;
+  "users.new.new": Record<string, never>;
+  "users.create": Record<string, never>;
+  "users.show": {id: string | number}
 }
 
-type RouteName = "dev.mailbox" | "registration.new" | "register.create" | "sign_in.new" | "sign_in.create" | "index" | "monitors.index" | "monitors.edit.edit" | "monitors.new.new" | "monitors.show" | "monitors.create" | "monitors.update" | "monitors.update" | "monitors.delete";
+type RouteName = "dev.mailbox" | "registration.new" | "register.create" | "sign_in.new" | "sign_in.create" | "index" | "monitors.index" | "monitors.edit.edit" | "monitors.new.new" | "monitors.show" | "monitors.create" | "monitors.update" | "monitors.update" | "monitors.delete" | "users.index" | "users.new.new" | "users.create" | "users.show";
 
 type RouteParamsWithQuery<T extends Record<string, any>> = T & {
   _query?: QueryParams;
@@ -49,7 +53,11 @@ type RoutePathConfig = {
       "/monitors": Record<string, never>;
       "/monitors/:id": {id: string | number};
       "/monitors/:id": {id: string | number};
-      "/monitors/:id": {id: string | number}
+      "/monitors/:id": {id: string | number};
+      "/users": Record<string, never>;
+      "/users/new": Record<string, never>;
+      "/users": Record<string, never>;
+      "/users/:id": {id: string | number}
 }
 
 type RoutePath = keyof RoutePathConfig;
