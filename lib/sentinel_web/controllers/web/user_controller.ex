@@ -16,20 +16,28 @@ defmodule SentinelWeb.Web.UserController do
     render_inertia(conn, "web/users/New")
   end
 
-  def create(conn, %{"user" => user_params}) do
+  def create(conn, user_params) do
+    account_id = get_account_id(conn)
+    user_params = Map.put(user_params, "account_id", account_id)
+
     case Accounts.create_user(user_params) do
       {:ok, user} ->
         conn
-        |> put_flash(:info, "Пользователь успешно создан")
+        |> put_flash(:info, dgettext("users", "User created successfully."))
         |> redirect(to: ~p"/users/#{user}")
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render_inertia(conn, "Web/Users/New", props: %{changeset: changeset})
+        conn
+        |> assign_errors(changeset)
+        |> render_inertia("web/users/New")
     end
   end
 
   def show(conn, %{"id" => id}) do
     user = Accounts.get_user!(id)
-    render_inertia(conn, "web/users/Show", props: %{user: user})
+
+    conn
+    |> assign_prop(:user, user)
+    |> render_inertia("web/users/Show")
   end
 end

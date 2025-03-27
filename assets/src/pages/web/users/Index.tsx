@@ -33,42 +33,44 @@ export default function Index({ users }: Props) {
                 </Link>
             </div>
 
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>{t("users.first_name")}</TableHead>
-                        <TableHead>{t("users.last_name")}</TableHead>
-                        <TableHead>{t("users.email")}</TableHead>
-                        <TableHead>{t("users.role")}</TableHead>
-                        <TableHead>{t("users.created_at")}</TableHead>
-                        <TableHead className="text-right">{t("users.actions")}</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {users.map((user) => (
-                        <TableRow key={user.id}>
-                            <TableCell>{user.first_name}</TableCell>
-                            <TableCell>{user.last_name}</TableCell>
-                            <TableCell>{user.email}</TableCell>
-                            <TableCell className="capitalize">{user.role}</TableCell>
-                            <TableCell>
-                                {new Date(user.inserted_at).toLocaleDateString("ru-RU", {
-                                    year: "numeric",
-                                    month: "long",
-                                    day: "numeric",
-                                })}
-                            </TableCell>
-                            <TableCell className="text-right">
-                                <Link href={Routes.path("users.show", { id: user.id })}>
-                                    <Button variant="ghost" size="sm">
-                                        {t("monitors.view")}
-                                    </Button>
-                                </Link>
-                            </TableCell>
+            <div className="max-w-3xl mx-auto">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>{t("users.first_name")}</TableHead>
+                            <TableHead>{t("users.last_name")}</TableHead>
+                            <TableHead>{t("users.email")}</TableHead>
+                            <TableHead>{t("users.role")}</TableHead>
+                            <TableHead>{t("users.created_at")}</TableHead>
+                            <TableHead className="text-right">{t("users.actions")}</TableHead>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableHeader>
+                    <TableBody>
+                        {users.map((user) => (
+                            <TableRow key={user.id}>
+                                <TableCell>{user.first_name}</TableCell>
+                                <TableCell>{user.last_name}</TableCell>
+                                <TableCell>{user.email}</TableCell>
+                                <TableCell className="capitalize">{user.role}</TableCell>
+                                <TableCell>
+                                    {new Date(user.inserted_at).toLocaleDateString("ru-RU", {
+                                        year: "numeric",
+                                        month: "long",
+                                        day: "numeric",
+                                    })}
+                                </TableCell>
+                                <TableCell className="text-right">
+                                    <Link href={Routes.path("users.show", { id: user.id })}>
+                                        <Button variant="ghost" size="sm">
+                                            {t("monitors.view")}
+                                        </Button>
+                                    </Link>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
         </AuthLayout>
     );
 } 

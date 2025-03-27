@@ -84,9 +84,7 @@ export default function New({ errors }: Props) {
                                     <FormMessage error={errors.last_name} />
                                 </FormItem>
                             </FormField>
-                        </div>
 
-                        <div className="grid gap-6">
                             <FormField name="email">
                                 <FormItem>
                                     <FormLabel htmlFor="email">{t("users.email")}</FormLabel>

@@ -6,7 +6,7 @@ defmodule Sentinel.Accounts.User do
 
   alias Sentinel.Accounts.Account
 
-  @derive {Jason.Encoder, only: [:id, :email, :role, :confirmed_at, :inserted_at, :updated_at]}
+  @derive {Jason.Encoder, only: [:id, :email, :first_name, :last_name, :role, :confirmed_at, :inserted_at, :updated_at]}
 
   schema "users" do
     field :email, :string
@@ -56,6 +56,15 @@ defmodule Sentinel.Accounts.User do
     |> cast_assoc(:account)
     |> put_change(:role, :admin)
     |> validate_email(opts)
+    |> validate_password(opts)
+  end
+
+  def create_changeset(user, attrs, opts \\ []) do
+    user
+    |> cast(attrs, [:email, :password, :first_name, :last_name, :account_id])
+    |> validate_email(opts)
+    # сделать нормальную генерацию пароля
+    |> put_change(:password, Ecto.UUID.generate())
     |> validate_password(opts)
   end
 
